@@ -6,7 +6,7 @@
   "scripts": {
     "build": "grunt pre-test",
     "test": "mocha dist/test/**/*.js --exit --reporter=list",
-    "coverage": "nyc npm test"
+    "coverage": "nyc npm test",
     "lint": "eslint src"
   },
   "repository": {
