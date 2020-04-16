@@ -18,7 +18,7 @@ server.listen(26658);
 
 # Installation
 
-This is a Node.js module available through (https://npmjs.org)[npm registry]
+This is a Node.js module available through [npm registry](https://npmjs.org)
 
 Before installing, Nodejs v12.0.0 and higher is required.
 
