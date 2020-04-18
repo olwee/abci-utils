@@ -28,6 +28,22 @@ Installation is done using `npm install` command.
 $ npm install abci-utils
 ```
 
+# Implemented Methods
+
+| Msg | Server | Client
+|---| ---| ---|
+| Echo | x | |
+| Flush | x | |
+| Info | x | |
+| SetOption |  | |
+| InitChain | x | |
+| Query | x | |
+| BeginBlock | x | |
+| CheckTx | x | |
+| DeliverTx | x | |
+| EndBlock | x | |
+| Commit | x | |
+
 # Features
 
 - ABCI Server Handlers with promises (async/await)
