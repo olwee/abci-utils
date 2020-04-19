@@ -10,6 +10,16 @@ const logger = pino();
 const State = () => {
   // Mempool always starts blank
   const mempool = [];
+  // Check State File Exists
+  const stateExists = fs.pathExistsSync('state.json');
+  if (!stateExists) {
+    fs.writeJsonSync('state.json', {
+      chainData: {
+        lastBlockHeight: 0,
+      },
+      appData: {},
+    }, { spaces: 2 });
+  }
   // Read from file
   const cache = fs.readJsonSync('state.json');
 

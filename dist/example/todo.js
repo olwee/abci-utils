@@ -271,15 +271,7 @@ var TodoApp = function TodoApp(state) {
     };
   }();
 
-  var query = function query(_ref4) {
-    var data = _ref4.data,
-        path = _ref4.path,
-        height = _ref4.height,
-        prove = _ref4.prove;
-    console.log(req);
-
-    if (path === '/todo') {}
-
+  var query = function query() {
     return {};
   };
 

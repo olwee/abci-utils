@@ -92,15 +92,128 @@ $ abci-cli info
 const server = abciServer({
   // ABCI Info Request
   info: async ({
-    version: '0.0.1',
-    block_version: 12,
-    p2p_version: 7,
+    version: '0.32.9-e6a7757b',
+    blockVersion: 10,
+    p2pVersion: 7
   }) => ({
     data: 'NodeJS Todo', // Name of the application
     version: '0.0.1',
     app_version: 1,
     last_block_height: '100', // Last Height Commited on the Application
     last_block_app_hash: '0xabc', // Last App Hash Committed on the Application, if height = 0, must  be ''
+  }),
+  // ABCI initChain Request
+  initChain: async ({
+    time: {
+      seconds: 1586626526,
+      nanos: 973515384
+    },
+    chainId: 'test-chain-Di4e1N',
+    consensusParams: {
+      block: {
+        maxBytes: 22020096,
+        maxGas: -1
+      },
+      evidence: {
+        maxAge: 100000
+      },
+      validator: {
+        pubKeyTypesList: [
+          'ed25519'
+        ]
+      }
+    },
+    validatorsList: [
+      {
+        pubKey: {
+          type: 'ed25519',
+          data: '7fCUyw3swEyrgnqVNQ29ENc/8V0m9q3vQeCtwLth7J0='
+        },
+        'power': 10
+      }
+    ],
+    'appStateBytes': '' // Base64 Encoded
+  }) => ({
+    data: 'NodeJS Todo', // Name of the application
+    version: '0.0.1',
+    app_version: 1,
+    last_block_height: '100', // Last Height Commited on the Application
+    last_block_app_hash: '0xabc', // Last App Hash Committed on the Application, if height = 0, must  be ''
+  }),
+  // ABCI query
+  query: async () => ({
+    data: '', // Base64 Encoded
+    path, // Can be 'undefined'
+    height: 0, // Height Query
+    prove: false,
+  }),
+  // ABCI beginBlockRequest
+  beginBlock: async ({
+    hash: '1eHGfl7O3L4YdT2A1a+LoImIV1LFrq3ESHlM9hlNhzI=',
+    header: {
+      version: {
+        block: 10,
+        app: 0
+      },
+      chainId: 'test-chain-Di4e1N',
+      height: 3,
+      time: {
+        seconds: 1587205383,
+        nanos: 454326863
+      },
+      numTxs: 0,
+      totalTxs: 0,
+      lastBlockId: {
+        hash: 'vw0nKIP5Enl3kQxK5Gbi8HkaRnnhqHtSv2bJ4J8ZxiM=',
+        partsHeader: {
+          total: 1,
+          hash: 'jTBaUA+pLtYnRY5wSiD3/TZEYO7rhLt6XVyWAHj92jM='
+        }
+      },
+      lastCommitHash: 'PaNx0MYK1L5MYYYTPRzzqofU8CP6d68ABAzAx/WIZI0=',
+      dataHash: '',
+      validatorsHash: 'yUZht2h0UPnGdPV4LfejtB3krz8oMU8hH+lf/7TbVUE=',
+      nextValidatorsHash: 'yUZht2h0UPnGdPV4LfejtB3krz8oMU8hH+lf/7TbVUE=',
+      consensusHash: 'BICRvH3cKD93v7+R1zxE2ljD34qcvIZ0Bdi389qtoi8=',
+      appHash: 'hBykN3pIXkou9SztGWN752sH8dgM1PJ+ixRYKMRnxHI=',
+      lastResultsHash: '',
+      evidenceHash: '',
+      proposerAddress: 'fNcvTjK07W6kk1m35rlZWvIvu3o='
+    },
+    lastCommitInfo: {
+      round: 0,
+      votesList: [
+        {
+          validator: {
+            address: 'fNcvTjK07W6kk1m35rlZWvIvu3o=',
+            power: 10
+          },
+          signedLastBlock: true
+        }
+      ]
+    },
+  'byzantineValidatorsList': []
+  }) => ({
+    // TODO
+  }),
+  // ABCI checkTx
+  checkTx: async () => ({
+    "tx": "gqR0eXBlqnRvZG8vU3RkVHildmFsdWWBo21zZ4KkdHlwZaNhZGSldmFsdWWlaGVsbG8=",
+    "type": 0
+  }),
+  // ABCI deliverTx
+  deliverTx: async () => ({
+    "tx": "gqR0eXBlqnRvZG8vU3RkVHildmFsdWWBo21zZ4KkdHlwZaNhZGSldmFsdWWlaGVsbG8=",
+  }),
+  // ABCI commit
+  commit: async () => ({
+    // TODO
+  }),
+  // ABCI endBlockRequest
+  endBlock: async ({
+    height: 4,
+  }) => ({
+    // TODO
   }),
 });
 

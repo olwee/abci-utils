@@ -22,7 +22,21 @@ var logger = pino();
 
 var State = function State() {
   // Mempool always starts blank
-  var mempool = []; // Read from file
+  var mempool = []; // Check State File Exists
+
+  var stateExists = fs.pathExistsSync('state.json');
+
+  if (!stateExists) {
+    fs.writeJsonSync('state.json', {
+      chainData: {
+        lastBlockHeight: 0
+      },
+      appData: {}
+    }, {
+      spaces: 2
+    });
+  } // Read from file
+
 
   var cache = fs.readJsonSync('state.json');
   if (typeof cache.appData.todoList === 'undefined') cache.appData.todoList = [];

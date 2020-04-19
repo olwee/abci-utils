@@ -24,7 +24,7 @@ var _msg_request = require("./abci/msg_request");
 var _msg_response = require("./abci/msg_response");
 
 var logger = (0, _pino["default"])().child({
-  module: 'test-server'
+  module: 'abci-server'
 });
 
 var ABCIHandler = function ABCIHandler(handlers) {
@@ -43,25 +43,19 @@ var ABCIHandler = function ABCIHandler(handlers) {
               return _context.abrupt("return", {});
 
             case 2:
-              _context.prev = 2;
-              _context.next = 5;
+              _context.next = 4;
               return handlers[msgType](msgVal);
 
-            case 5:
+            case 4:
               result = _context.sent;
               return _context.abrupt("return", result);
 
-            case 9:
-              _context.prev = 9;
-              _context.t0 = _context["catch"](2);
-              throw _context.t0;
-
-            case 12:
+            case 6:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 9]]);
+      }, _callee);
     }));
 
     return function route(_x, _x2) {
@@ -77,6 +71,12 @@ var ABCIHandler = function ABCIHandler(handlers) {
 var ABCIConnection = function ABCIConnection(msgHandler) {
   return function (c) {
     var connId = (0, _uuid.v4)();
+    logger.info({
+      connId: connId,
+      mode: 'established',
+      peerIP: c.remoteAddress,
+      peerPort: c.remotePort
+    });
     var recvBuf = new _bl["default"]();
     var isWaiting = false;
 
@@ -109,17 +109,11 @@ var ABCIConnection = function ABCIConnection(msgHandler) {
                 msgBytes = recvBuf.slice(msgLenRead, totalLen);
                 recvBuf.consume(totalLen);
                 _reqDecode = (0, _msg_request.decode)(msgBytes, false), msgType = _reqDecode.msgType, msgVal = _reqDecode.msgVal;
-                logger.info({
-                  connId: connId,
-                  mode: 'request',
-                  msgType: msgType
-                }); // logger.info({ msgType, msgVal });
-
                 c.pause();
                 isWaiting = true;
 
                 if (!(msgType === 'echo')) {
-                  _context2.next = 15;
+                  _context2.next = 14;
                   break;
                 }
 
@@ -134,9 +128,9 @@ var ABCIConnection = function ABCIConnection(msgHandler) {
                 c.emit('evt-done');
                 return _context2.abrupt("return");
 
-              case 15:
+              case 14:
                 if (!(msgType === 'flush')) {
-                  _context2.next = 21;
+                  _context2.next = 19;
                   break;
                 }
 
@@ -145,57 +139,40 @@ var ABCIConnection = function ABCIConnection(msgHandler) {
                   msgType: 'flush',
                   msgVal: {}
                 });
-                logger.info({
-                  connId: connId,
-                  mode: 'response',
-                  msgType: 'flush'
-                });
                 writeData(_respBuf);
                 c.emit('evt-done');
                 return _context2.abrupt("return");
 
-              case 21:
-                _context2.prev = 21;
-                _context2.next = 24;
+              case 19:
+                _context2.prev = 19;
+                _context2.next = 22;
                 return msgHandler.route(msgType, msgVal);
 
-              case 24:
+              case 22:
                 handlerResp = _context2.sent;
-                logger.info({
-                  connId: connId,
-                  mode: 'response',
-                  msgType: msgType,
-                  writing: true
-                });
                 _respBuf2 = (0, _msg_response.encode)({
                   msgType: msgType,
                   msgVal: handlerResp
                 });
                 writeData(_respBuf2);
-                logger.info({
-                  connId: connId,
-                  mode: 'response',
-                  msgType: msgType,
-                  writing: false
-                });
                 c.emit('evt-done');
-                _context2.next = 35;
+                _context2.next = 31;
                 break;
 
-              case 32:
-                _context2.prev = 32;
-                _context2.t0 = _context2["catch"](21);
+              case 28:
+                _context2.prev = 28;
+                _context2.t0 = _context2["catch"](19);
 
                 if (_context2.t0) {
                   c.emit('error', _context2.t0);
                 }
 
-              case 35:
+              case 31:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[21, 32]]);
+        }, _callee2, null, [[19, 28]]);
       }));
 
       return function processRecvData() {
@@ -213,11 +190,6 @@ var ABCIConnection = function ABCIConnection(msgHandler) {
       c.resume();
     });
     c.on('data', function (rawData) {
-      logger.info({
-        evt: 'onData',
-        rawData: rawData.toString('hex'),
-        isWaiting: isWaiting
-      });
       recvBuf.append(rawData);
       if (isWaiting === true) return;
       processRecvData()["catch"](function (procErr) {

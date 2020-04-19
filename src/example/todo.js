@@ -146,18 +146,7 @@ const TodoApp = (state) => {
     console.log(JSON.stringify(queryResp.data, null, 2));
   };
 
-  const query = ({
-    data,
-    path,
-    height,
-    prove,
-  }) => {
-    console.log(req);
-    if (path === '/todo') {
-
-    }
-    return {};
-  };
+  const query = () => ({});
 
   return {
     checkTx,
