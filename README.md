@@ -100,7 +100,7 @@ const server = abciServer({
     version: '0.0.1',
     app_version: 1,
     last_block_height: 100, // Last Height Commited on the Application
-    last_block_app_hash: '0xabc', // Last App Hash Committed on the Application, if height = 0, must  be ''
+    last_block_app_hash: Buffer.from('abc'), // Last App Hash Committed on the Application, if height = 0, must  be ''
   }),
   // ABCI initChain Request
   // Only called when height = 0
@@ -172,14 +172,14 @@ const server = abciServer({
     log: '',
     info: '',
     index: 0,
-    key: '',
-    value: '',
+    key: Buffer.from(''),
+    value: Buffer.from(''),
     // For Merkle Proof Operations
     proof: {
       op: [{
         type: 0,
-        key: '',
-        data: '',
+        key: Buffer.from(''),
+        data: Buffer.from(''),
       }],
     },
     height: 0,
