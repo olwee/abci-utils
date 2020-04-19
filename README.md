@@ -320,7 +320,7 @@ const server = abciServer({
           type: 'ed25519',
           data: '7fCUyw3swEyrgnqVNQ29ENc/8V0m9q3vQeCtwLth7J0='
         },
-        'power': 10
+        power: 10
       }
     ],
   }),
