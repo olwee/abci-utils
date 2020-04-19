@@ -99,10 +99,11 @@ const server = abciServer({
     data: 'NodeJS Todo', // Name of the application
     version: '0.0.1',
     app_version: 1,
-    last_block_height: '100', // Last Height Commited on the Application
+    last_block_height: 100, // Last Height Commited on the Application
     last_block_app_hash: '0xabc', // Last App Hash Committed on the Application, if height = 0, must  be ''
   }),
   // ABCI initChain Request
+  // Only called when height = 0
   initChain: async ({
     time: {
       seconds: 1586626526,
@@ -134,18 +135,55 @@ const server = abciServer({
     ],
     'appStateBytes': '' // Base64 Encoded
   }) => ({
-    data: 'NodeJS Todo', // Name of the application
-    version: '0.0.1',
-    app_version: 1,
-    last_block_height: '100', // Last Height Commited on the Application
-    last_block_app_hash: '0xabc', // Last App Hash Committed on the Application, if height = 0, must  be ''
+    consensusParams: {
+      block: {
+        maxBytes: 22020096,
+        maxGas: -1
+      },
+      evidence: {
+        maxAge: 100000
+      },
+      validator: {
+        pubKeyTypesList: [
+          'ed25519'
+        ]
+      }
+    },
+    // We can update the voting power of validators to be different from genesis.json here
+    validatorsList: [
+      {
+        pubKey: {
+          type: 'ed25519',
+          data: '7fCUyw3swEyrgnqVNQ29ENc/8V0m9q3vQeCtwLth7J0='
+        },
+        'power': 10
+      }
+    ],
   }),
   // ABCI query
-  query: async () => ({
+  query: async ({
     data: '', // Base64 Encoded
     path, // Can be 'undefined'
     height: 0, // Height Query
     prove: false,
+  }) => ({
+    //
+    code: 1,
+    log: '',
+    info: '',
+    index: 0,
+    key: '',
+    value: '',
+    // For Merkle Proof Operations
+    proof: {
+      op: [{
+        type: 0,
+        key: '',
+        data: '',
+      }],
+    },
+    height: 0,
+    codespace: '',
   }),
   // ABCI beginBlockRequest
   beginBlock: async ({
@@ -194,26 +232,97 @@ const server = abciServer({
     },
   'byzantineValidatorsList': []
   }) => ({
-    // TODO
+    events: [{
+      type: '',
+      attributes: [{
+        key: Buffer.from(''),
+        value: Buffer.from(''),
+      }],
+    }],
   }),
   // ABCI checkTx
-  checkTx: async () => ({
+  checkTx: async ({
     "tx": "gqR0eXBlqnRvZG8vU3RkVHildmFsdWWBo21zZ4KkdHlwZaNhZGSldmFsdWWlaGVsbG8=",
     "type": 0
+  }) => ({
+    //
+    code: 0,
+    data: Buffer.from(''), 
+    log: '',
+    info: '',
+    gasWanted: 0,
+    gasUsed: 0,
+    events: [{
+      type: '',
+      attributes: [{
+        key: Buffer.from(''),
+        value: Buffer.from(''),
+      }],
+    }],
+    codespace: '',
   }),
   // ABCI deliverTx
-  deliverTx: async () => ({
+  deliverTx: async ({
     "tx": "gqR0eXBlqnRvZG8vU3RkVHildmFsdWWBo21zZ4KkdHlwZaNhZGSldmFsdWWlaGVsbG8=",
+  }) => ({
+    code: 0,
+    data: Buffer.from(''), 
+    log: '',
+    info: '',
+    gasWanted: 0,
+    gasUsed: 0,
+    events: [{
+      type: '',
+      attributes: [{
+        key: Buffer.from(''),
+        value: Buffer.from(''),
+      }],
+    }],
+    codespace: '',
   }),
   // ABCI commit
   commit: async () => ({
     // TODO
+    // Data is the AppHash
+    data: Buffer.from(''),
   }),
   // ABCI endBlockRequest
   endBlock: async ({
     height: 4,
   }) => ({
     // TODO
+    events: [{
+      type: '',
+      attributes: [{
+        key: Buffer.from(''),
+        value: Buffer.from(''),
+      }],
+    }],
+    consensusParams: {
+      block: {
+        maxBytes: 22020096,
+        maxGas: -1
+      },
+      evidence: {
+        maxAge: 100000
+      },
+      validator: {
+        pubKeyTypesList: [
+          'ed25519'
+        ]
+      }
+    },
+    // We can update the voting power of validators here
+    // Can be used to handle slashing, introduction of new validators, etc
+    validatorsList: [
+      {
+        pubKey: {
+          type: 'ed25519',
+          data: '7fCUyw3swEyrgnqVNQ29ENc/8V0m9q3vQeCtwLth7J0='
+        },
+        'power': 10
+      }
+    ],
   }),
 });
 
