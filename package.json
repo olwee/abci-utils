@@ -21,7 +21,7 @@
   "author": "Oliver Wee",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bl": "^4.0.2",
     "fs-extra": "^9.0.0",
     "pino": "^6.0.0",
